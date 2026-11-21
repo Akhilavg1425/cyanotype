@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;600&family=Special+Elite&display=swap" rel="stylesheet">
   <link href="https://api.mapbox.com/mapbox-gl-js/v3.31.0/mapbox-gl.css" rel="stylesheet">
   <link rel="stylesheet" href="lib/scrollmap.css">
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
 <div class="content">
@@ -50,11 +50,11 @@
           </figure>
           <figure>
             <img src="img/board-02-blueprint-study.jpg" alt="Blueprint of a residential floor plan with hairline walls and a title block">
-            <figcaption><b>Architectural blueprint, residential floor plan</b>, study after a c. 1920s ferroprussiate print.<br>Form and type: hairline drafting lines, double-line walls, dash-dot center lines, hatching and title-block lettering.</figcaption>
+            <figcaption><b>Blueprint study, residential floor plan</b>. My own drawing in the style of a c. 1920s ferroprussiate print, made to isolate the drafting conventions.<br>Form and type: hairline drafting lines, double-line walls, dash-dot center lines, hatching and title-block lettering.</figcaption>
           </figure>
           <figure>
-            <img src="img/board-03-fern-study.jpg" alt="Cyanotype of ferns, flat fronds in white and raised fronds in pale blue">
-            <figcaption><b>Fern plate</b>, study after Anna Atkins and Anne Dixon, <i>Cyanotypes of British and Foreign Ferns</i> (1853).<br>Color: fronds pressed flat print white and raised ones print pale blue, so one hue still gives a clear hierarchy.</figcaption>
+            <img src="Lab3.jpg" alt="Cyanotype title page of British Ferns, white fern fronds and hand lettering on blue">
+            <figcaption><b>Anna Atkins and Anne Dixon, <i>British Ferns</i></b>, title page, 1853, from <i>Cyanotypes of British and Foreign Ferns</i>. J. Paul Getty Museum, 84.XO.227.2, public domain.<br>Color: fronds pressed flat print white and thicker ones print pale blue, so one hue still gives a clear hierarchy.</figcaption>
           </figure>
         </div>
         <div class="statement">
@@ -292,7 +292,8 @@
           <li><b>Approximate halos.</b> The blurred line under the coast fakes the Atkins glow, but it cannot spread into the land the way real emulsion does.</li>
           <li><b>Coast simplification.</b> I wanted very simplified coasts at z0-5. Mapbox Streets already generalizes them, and Studio cannot simplify further, so the halo and soft color do that job.</li>
           <li><b>Fonts.</b> Special Elite and Plex Mono only cover Latin script. Every label falls back to Arial Unicode MS, and I use English names where they exist, so cities like Tokyo and Cairo still get labels.</li>
-          <li><b>Pattern scale.</b> Patterns do not scale with zoom. I kept the tiles small (16-256 px) and tested them at z12 and z16.</li>
+          <li><b>Pattern scale.</b> Patterns do not scale with zoom. I kept the tiles small (16-160 px) and tested them at z12 and z16.</li>
+          <li><b>Tile seams.</b> My first water texture was a 256 px tile, and in the browser it left pale stripes along tile edges at z3-8. I redrew it at 128 px and moved the page to Mapbox GL JS 3.31, and the seams went away.</li>
         </ul>
         <div class="board-notes"><img src="img/note-halo.jpg" alt="Notebook: halo reads best at small scales"><img src="img/note-iron-stain.jpg" alt="Notebook: Iron Stain is the only warm color, keep it for my own data"></div>
       </div>
@@ -317,7 +318,7 @@
         <p><b>Credits</b></p>
         <p>Map design and text: Akhila, Geog 572: Graphic Design in Cartography, Lab 3.</p>
         <p>Basemap built in Mapbox Studio from a blank style. Data: Mapbox Streets v8, Mapbox Terrain v2 and Terrain-DEM v1, &copy; Mapbox &copy; OpenStreetMap contributors.</p>
-        <p>Inspiration: Anna Atkins, <i>Photographs of British Algae: Cyanotype Impressions</i> (1843-53), The Metropolitan Museum of Art, public domain. Anna Atkins and Anne Dixon, <i>Cyanotypes of British and Foreign Ferns</i> (1853). Architectural blueprint, c. 1920s.</p>
+        <p>Inspiration: Anna Atkins, <i>Photographs of British Algae: Cyanotype Impressions</i> (1843-53), The Metropolitan Museum of Art, public domain. Anna Atkins and Anne Dixon, <i>British Ferns</i> (1853), J. Paul Getty Museum, 84.XO.227.2, public domain. Blueprint study drawn by the author.</p>
         <p>Fonts: Special Elite (Astigmatic), IBM Plex Mono and IBM Plex Sans (IBM). Page built with <a href="https://github.com/uwcartlab/scrollmap">ScrollMap</a> and Mapbox GL JS.</p>
       </div>
     </div>
@@ -326,8 +327,8 @@
 </div>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.31.0/mapbox-gl.js"></script>
-<script src="js/config.js?v=4"></script>
+<script src="js/config.js?v=5"></script>
 <script src="lib/scrollmap.js"></script>
-<script src="js/explainer.js?v=4"></script>
+<script src="js/explainer.js?v=5"></script>
 </body>
 </html>
