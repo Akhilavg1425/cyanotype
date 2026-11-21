@@ -4,6 +4,6 @@
 // token:   your Default public token (starts with pk.), from account.mapbox.com
 window.CYANO = {
   user: "akhilavg",
-  styleId: "cmwpuyqid019201qrcdlt3nv2",
+  styleId: "cmwpvi00w00dz01sa8ieb8cm5",
   token: "pk.eyJ1IjoiYWtoaWxhdmciLCJhIjoiY213cHRyOGJsMDdoNzJ4cTN5MHc3cDMxbiJ9.-YF0rBwNBSHc6p62ZcBPOQ"
 };

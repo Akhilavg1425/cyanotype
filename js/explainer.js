@@ -17,13 +17,43 @@
     return;
   }
 
-  // 1. static snapshots: <img data-static="lon,lat,zoom[,bearing]">
-  const base = `https://api.mapbox.com/styles/v1/${C.user}/${C.styleId}/static`;
-  document.querySelectorAll("img[data-static]").forEach(img => {
-    const [lon, lat, z, bearing = 0] = img.dataset.static.split(",").map(Number);
-    img.src = `${base}/${lon},${lat},${z},${bearing}/600x400@2x?access_token=${C.token}`;
-    img.loading = "lazy";
-  });
+  // 1. snapshots for the comparison grids: <img data-static="lon,lat,zoom[,bearing]">
+  // Rendered one at a time from a hidden live map, so the images match the slippy map exactly.
+  // Falls back to the Static Images API if WebGL is unavailable.
+  const imgs = [...document.querySelectorAll("img[data-static]")];
+  const parse = img => img.dataset.static.split(",").map(Number);
+  const staticUrl = ([lon, lat, z, b = 0]) =>
+    `https://api.mapbox.com/styles/v1/${C.user}/${C.styleId}/static/${lon},${lat},${z},${b}/600x400@2x?access_token=${C.token}`;
+  function snapshots() {
+    if (!window.mapboxgl || !mapboxgl.supported || !mapboxgl.supported()) {
+      imgs.forEach(img => { img.src = staticUrl(parse(img)); });
+      return;
+    }
+    const box = document.createElement("div");
+    box.style.cssText = "position:fixed;left:-2000px;top:0;width:900px;height:600px;";
+    document.body.appendChild(box);
+    const [lon, lat, z] = parse(imgs[0]);
+    const snap = new mapboxgl.Map({ container: box, style: `mapbox://styles/${C.user}/${C.styleId}`,
+      center: [lon, lat], zoom: z, interactive: false, preserveDrawingBuffer: true,
+      attributionControl: false, fadeDuration: 0 });
+    let i = 0;
+    const next = () => {
+      if (i >= imgs.length) { snap.remove(); box.remove(); return; }
+      const img = imgs[i], [x, y, zz, b = 0] = parse(img);
+      snap.jumpTo({ center: [x, y], zoom: zz, bearing: b });
+      snap.once("idle", () => {
+        try { img.src = snap.getCanvas().toDataURL("image/jpeg", 0.88); }
+        catch (e) { img.src = staticUrl([x, y, zz, b]); }
+        i++; setTimeout(next, 50);
+      });
+    };
+    snap.on("load", next);
+    snap.on("error", () => {});
+  }
+  if (imgs.length) {
+    // start once the page has settled so the scrolly map loads first
+    window.addEventListener("load", () => setTimeout(snapshots, 800));
+  }
 
   // 3. interactive embed (Mapbox share URL)
   const frame = document.getElementById("full-map");
