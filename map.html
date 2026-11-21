@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cyanotype slippy map</title>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.31.0/mapbox-gl.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=Special+Elite&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; height: 100%; background: #163F6E; }
+    #map { position: absolute; inset: 0; }
+    .tag { position: absolute; left: 12px; top: 12px; z-index: 2; background: rgba(12,40,78,.85);
+           color: #F2F0E6; border: 1px solid #F2F0E6; padding: 8px 12px; font: 13px 'IBM Plex Mono', monospace; }
+    .tag b { font: 16px 'Special Elite', monospace; letter-spacing: .25em; display: block; }
+    .tag a { color: #9CC3E0; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div class="tag"><b>CYANOTYPE</b>Akhila · Geog 572 Lab 3 · <a href="index.html">design explainer</a> · <span id="z"></span></div>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.31.0/mapbox-gl.js"></script>
+  <script src="js/config.js?v=5"></script>
+  <script>
+    {
+      const C = window.CYANO;
+      mapboxgl.accessToken = C.token;
+      const map = new mapboxgl.Map({
+        container: "map",
+        style: `mapbox://styles/${C.user}/${C.styleId}`,
+        center: [-89.384, 43.074],
+        zoom: 11,
+        hash: true
+      });
+      map.addControl(new mapboxgl.NavigationControl(), "top-right");
+      map.addControl(new mapboxgl.ScaleControl(), "bottom-left");
+      const z = document.getElementById("z");
+      const upd = () => { z.textContent = "z" + map.getZoom().toFixed(1); };
+      map.on("load", upd); map.on("zoom", upd);
+    }
+  </script>
+</body>
+</html>
