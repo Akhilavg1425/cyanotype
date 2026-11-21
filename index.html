@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cyanotype: a basemap printed in sunlight</title>
+  <meta name="description" content="Design explainer for the Cyanotype slippy basemap, built in Mapbox Studio. Geog 572 Lab 3, Akhila.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;600&family=Special+Elite&display=swap" rel="stylesheet">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css" rel="stylesheet">
+  <link rel="stylesheet" href="lib/scrollmap.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="content">
+
+  <!-- ============ TITLE ============ -->
+  <div class="row hero">
+    <div class="center-wide title" style="text-align:center">
+      <h1>Cyanotype</h1>
+      <p>a basemap printed in sunlight</p>
+      <p>Akhila &middot; Meet the Cartographer &middot; Geog 572 Lab 3</p>
+      <p class="scroll-cue">scroll &darr;</p>
+    </div>
+  </div>
+
+  <!-- ============ INTRO ============ -->
+  <div class="row">
+    <div class="center">
+      <div class="kicker">The idea</div>
+      <h2>Light, blocked</h2>
+      <p>A cyanotype records light. Paper coated with iron salts turns Prussian blue wherever the sun hits it. Anything laid on top blocks the light, so its outline stays white. Anna Atkins used this process in 1843 to make the first book illustrated with photographs, pressing algae and ferns directly onto the sheet.</p>
+      <p>I treat the basemap the same way. Land is the exposed sheet. Water is the darkest exposure. Mapped features are objects laid on the paper, so they print in white or pale blue. With only one hue, every bit of contrast has to come from value, line weight and texture.</p>
+      <p>This page walks through how I built that idea into a slippy tileset in Mapbox Studio, from the inspiration board to the final map at the bottom.</p>
+    </div>
+  </div>
+
+  <!-- ============ INSPIRATION BOARD ============ -->
+  <div class="row" id="board">
+    <div class="center-wide">
+      <div class="sheet">
+        <div class="kicker">01 &middot; Inspiration board</div>
+        <h2>Three prints</h2>
+        <div class="board">
+          <figure>
+            <img src="img/board-01-atkins-algae.jpg" alt="Title page of Anna Atkins, Photographs of British Algae, white hand lettering on cyanotype blue">
+            <figcaption><b>Anna Atkins, <i>Photographs of British Algae: Cyanotype Impressions</i></b>, title page, 1843-53. The Metropolitan Museum of Art, public domain.<br>Type and texture: white hand lettering on blue and an uneven, brushed emulsion.</figcaption>
+          </figure>
+          <figure>
+            <img src="img/board-02-blueprint-study.jpg" alt="Blueprint of a residential floor plan with hairline walls and a title block">
+            <figcaption><b>Architectural blueprint, residential floor plan</b>, study after a c. 1920s ferroprussiate print.<br>Form and type: hairline drafting lines, double-line walls, dash-dot center lines, hatching and title-block lettering.</figcaption>
+          </figure>
+          <figure>
+            <img src="img/board-03-fern-study.jpg" alt="Cyanotype of ferns, flat fronds in white and raised fronds in pale blue">
+            <figcaption><b>Fern plate</b>, study after Anna Atkins and Anne Dixon, <i>Cyanotypes of British and Foreign Ferns</i> (1853).<br>Color: fronds pressed flat print white and raised ones print pale blue, so one hue still gives a clear hierarchy.</figcaption>
+          </figure>
+        </div>
+        <div class="statement">
+          <div>
+            <h3>Style statement</h3>
+            <p>Whatever blocks the sun stays white, and everything exposed turns Prussian blue. The blueprint gives me a line vocabulary. Atkins gives me the texture, the hand-set type and the soft white halo around each specimen. The fern plate shows that one hue at a few values is enough for a hierarchy.</p>
+          </div>
+          <div>
+            <h3>Mood</h3>
+            <p>Pleasant and mildly deactivating: calm and quiet. Low contrast inside the blue keeps the map calm, and the white hairlines suggest scientific care.</p>
+          </div>
+        </div>
+        <div class="board-notes">
+          <img src="img/note-one-hue.jpg" alt="Notebook: one hue, so contrast has to come from value and line weight. Atkins halo equals my coastline glow.">
+          <img src="img/note-atkins.jpg" alt="Notebook: Anna Atkins, Cyanotype Impressions, British algae">
+          <img src="img/note-coasts.jpg" alt="Notebook: simplify coasts hard at z0-5, it should feel like a pressed specimen, not a survey">
+        </div>
+        <p class="caption-sm">Notebook pages from the first week of the project.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SPEC SHEET ============ -->
+  <div class="row" id="spec">
+    <div class="center-wide">
+      <div class="sheet">
+        <div class="kicker">02 &middot; Specification sheet</div>
+        <h2>Breaking the prints apart</h2>
+        <p>I broke the board into the four parts the director asked for: color, type, form and texture. Every rule below became one or more layers in the Studio style.</p>
+
+        <h3>Color: one hue, seven values</h3>
+        <div class="swatches">
+          <div class="swatch"><div class="chip" style="background:#0C284E"></div><b>Deep Exposure</b><span>#0C284E<br>water</span></div>
+          <div class="swatch"><div class="chip" style="background:#163F6E"></div><b>Prussian Ground</b><span>#163F6E<br>land, background</span></div>
+          <div class="swatch"><div class="chip" style="background:#2A5A8C"></div><b>Mid Exposure</b><span>#2A5A8C<br>landuse, buildings</span></div>
+          <div class="swatch"><div class="chip" style="background:#4F7FAF"></div><b>Pale Frond</b><span>#4F7FAF<br>parks, vegetation</span></div>
+          <div class="swatch"><div class="chip" style="background:#9CC3E0"></div><b>Faded Cyan</b><span>#9CC3E0<br>minor lines, halos</span></div>
+          <div class="swatch"><div class="chip" style="background:#F2F0E6"></div><b>Paper White</b><span>#F2F0E6<br>major lines, labels</span></div>
+          <div class="swatch"><div class="chip" style="background:#C08A5A"></div><b>Iron Stain</b><span>#C08A5A<br>custom data only</span></div>
+        </div>
+        <p>Darker means more exposed. Water is darkest, land is the middle value, and features get lighter as they rise in the hierarchy. Iron Stain is the one warm color, and I keep it off the basemap so it stays free for thematic data.</p>
+
+        <div class="two-col">
+          <div>
+            <h3>Type</h3>
+            <div class="type-row"><div class="spec">Places, countries<br>Special Elite, caps, 0.3 em</div><div class="sample-elite">Madison</div></div>
+            <div class="type-row"><div class="spec">Roads, POIs, transit<br>IBM Plex Mono, 9-12 px</div><div class="sample-mono">University Avenue</div></div>
+            <div class="type-row"><div class="spec">Water features<br>Plex Mono Italic, spaced</div><div class="sample-italic">lake mendota</div></div>
+            <div class="type-row"><div class="spec">All labels<br>halo Prussian 1.5 px, blur 1</div><div class="mono" style="font-size:13px">ink bleeding into damp paper</div></div>
+            <p class="caption-sm">Special Elite has the uneven strike of a typewriter, close to hand lettering on a title block. Plex Mono reads like drafting notes.</p>
+          </div>
+          <div>
+            <h3>Form: line vocabulary</h3>
+            <svg class="lines" viewBox="0 0 440 330" role="img" aria-label="Line vocabulary">
+              <rect width="440" height="330" fill="#163F6E"/>
+              <g stroke-linecap="butt">
+                <line x1="14" y1="22" x2="120" y2="22" stroke="#F2F0E6" stroke-width="1.3"/><line x1="14" y1="28" x2="120" y2="28" stroke="#F2F0E6" stroke-width="1.3"/>
+                <line x1="14" y1="62" x2="120" y2="62" stroke="#F2F0E6" stroke-width="2.2"/>
+                <line x1="14" y1="100" x2="120" y2="100" stroke="#9CC3E0" stroke-width="0.8"/>
+                <line x1="14" y1="138" x2="120" y2="138" stroke="#F2F0E6" stroke-opacity=".85" stroke-width="1.3" stroke-dasharray="10 2.6 1.3 2.6"/>
+                <line x1="14" y1="176" x2="120" y2="176" stroke="#F2F0E6" stroke-opacity=".5" stroke-width="0.8" stroke-dasharray="2.4 2.4"/>
+                <line x1="14" y1="214" x2="120" y2="214" stroke="#9CC3E0" stroke-width="1"/>
+                <g stroke="#9CC3E0" stroke-width="1"><line x1="21" y1="210" x2="21" y2="218"/><line x1="35" y1="210" x2="35" y2="218"/><line x1="49" y1="210" x2="49" y2="218"/><line x1="63" y1="210" x2="63" y2="218"/><line x1="77" y1="210" x2="77" y2="218"/><line x1="91" y1="210" x2="91" y2="218"/><line x1="105" y1="210" x2="105" y2="218"/></g>
+                <line x1="14" y1="252" x2="120" y2="252" stroke="#9CC3E0" stroke-opacity=".7" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="0.1 4"/>
+                <line x1="14" y1="290" x2="120" y2="290" stroke="#9CC3E0" stroke-opacity=".45" stroke-width="5" style="filter:blur(2px)"/>
+                <line x1="14" y1="290" x2="120" y2="290" stroke="#F2F0E6" stroke-width="0.7"/>
+              </g>
+              <text x="140" y="24">Motorway, trunk</text><text class="d" x="140" y="38">hollow double line (line-gap-width)</text>
+              <text x="140" y="60">Primary, secondary</text><text class="d" x="140" y="74">single Paper White line, butt cap</text>
+              <text x="140" y="98">Street, minor</text><text class="d" x="140" y="112">Faded Cyan hairline, 0.5-1 px</text>
+              <text x="140" y="136">Country</text><text class="d" x="140" y="150">dash-dot drafting center line</text>
+              <text x="140" y="174">State, county</text><text class="d" x="140" y="188">short dash, 50% opacity</text>
+              <text x="140" y="212">Rail</text><text class="d" x="140" y="226">Faded Cyan line with ticks (line-pattern)</text>
+              <text x="140" y="250">Path, trail</text><text class="d" x="140" y="264">dotted [0.1, 2], round cap</text>
+              <text x="140" y="288">Coastline</text><text class="d" x="140" y="302">Paper White 0.6 px over a 3 px blurred halo</text>
+            </svg>
+          </div>
+        </div>
+
+        <h3>Texture: patterns uploaded to Studio</h3>
+        <div class="textures">
+          <figure><img src="img/tex-emulsion-grain.jpg" alt="Emulsion grain"><figcaption>Emulsion grain<br>background-pattern, all zooms</figcaption></figure>
+          <figure><img src="img/tex-water.jpg" alt="Over-exposed water"><figcaption>Over-exposed water<br>fill-pattern, water</figcaption></figure>
+          <figure><img src="img/tex-frond.jpg" alt="Frond print"><figcaption>Frond print<br>fill-pattern, parks z12+</figcaption></figure>
+          <figure><img src="img/tex-hatch.jpg" alt="Drafting hatch"><figcaption>Drafting hatch<br>fill-pattern, buildings z15+</figcaption></figure>
+        </div>
+        <p class="caption-sm" style="margin-top:14px">Studio has no paper overlay or blend modes, so the texture lives inside the patterns on the background, water, parks and buildings. I redrew each one as a tileable SVG because Studio only accepts SVG images.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SCROLLY: FORM / COLOR / TYPE / TEXTURE ============ -->
+  <div class="row" style="margin-bottom:8vh">
+    <div class="center">
+      <div class="kicker">03 &middot; The tileset</div>
+      <h2>From sheet to tiles</h2>
+      <p>The map behind the next cards is the live tileset. Each card moves it to a place and zoom that shows one design rule. The readout in the corner tracks the zoom level and which of my three scale bands it falls in: Specimen (z0-5), Survey (z6-11) and Plan (z12+).</p>
+    </div>
+  </div>
+
+  <div class="scroll-container needs-config" id="scrolly">
+    <div class="background-item">
+      <div id="bgmap"></div>
+    </div>
+    <div class="foreground-item no-event">
+
+      <!-- FORM -->
+      <div class="row"><div class="left step" data-view="12,52,3.6"><div class="sheet">
+        <div class="section-label">Form</div><span class="zoom-tag">z3.6 &middot; Europe</span>
+        <h3>Ruled boundaries</h3>
+        <p>Country borders use the dash-dot center line from the blueprint, in Paper White at 85% opacity. They have butt caps and no casing, so they stay crisp like ruled lines. States get a short dash at 50%. Both fade after z11, where streets take over.</p>
+      </div></div></div>
+
+      <div class="row"><div class="right step" data-view="-122.55,47.62,8.6"><div class="sheet">
+        <div class="section-label">Form</div><span class="zoom-tag">z8.6 &middot; Puget Sound</span>
+        <h3>The Atkins halo</h3>
+        <p>The coast is a 0.6 px Paper White line drawn over a 3-5 px blurred Faded Cyan line. That blur fakes the glow around Atkins' algae, where light crept under the edge of the specimen. My notes said the halo reads best at small scales, so its opacity drops from 0.55 at z0 to 0.25 at z15.</p>
+      </div></div></div>
+
+      <div class="row"><div class="left step" data-view="-87.655,41.876,11.6"><div class="sheet">
+        <div class="section-label">Form</div><span class="zoom-tag">z11.6 &middot; Chicago</span>
+        <h3>Hollow motorways</h3>
+        <p>Motorways and trunks are hollow double lines, made with line-gap-width so the ground shows through, like double walls on a floor plan. The gap grows from 1 px at z5 to 12 px at z18. On bridges I draw a strip of Prussian Ground inside the gap first, so roads passing underneath do not show through.</p>
+      </div></div></div>
+
+      <div class="row"><div class="right step" data-view="-89.392,43.069,14.8"><div class="sheet">
+        <div class="section-label">Form</div><span class="zoom-tag">z14.8 &middot; Madison</span>
+        <h3>Hairlines and ticks</h3>
+        <p>Streets are Faded Cyan hairlines, 0.5 px at z12 and 1 px by z16. Rail swaps from a plain line to a ticked line-pattern at z12. Walking paths appear at z14 as dotted lines with round caps, the lightest marks on the map.</p>
+      </div></div></div>
+
+      <!-- COLOR -->
+      <div class="row"><div class="left step" data-view="-89.40,43.085,11.8"><div class="sheet">
+        <div class="section-label">Color</div><span class="zoom-tag">z11.8 &middot; Madison</span>
+        <h3>Exposure as hierarchy</h3>
+        <p>Here the whole value ladder is visible at once. Lakes Mendota and Monona are Deep Exposure. The isthmus is Prussian Ground with urban landuse in Mid Exposure at 40%. Parks print in Pale Frond, and roads and labels sit on top in Faded Cyan and Paper White. Nothing on the basemap leaves the blue.</p>
+      </div></div></div>
+
+      <!-- TYPE -->
+      <div class="row"><div class="right step" data-view="-89.6,43.6,6.3"><div class="sheet">
+        <div class="section-label">Type</div><span class="zoom-tag">z6.3 &middot; Upper Midwest</span>
+        <h3>Title-block lettering</h3>
+        <p>Places are set in Special Elite. Cities are uppercase with 0.3 em tracking and sit beside a square marker, like a survey benchmark: open for cities, filled for capitals. Towns switch to title case at 11-13 px. The markers drop away at z12-13, once the street grid locates the place on its own.</p>
+      </div></div></div>
+
+      <div class="row"><div class="left step" data-view="-84.5,45.2,5.2"><div class="sheet">
+        <div class="section-label">Type</div><span class="zoom-tag">z5.2 &middot; Great Lakes</span>
+        <h3>Quiet water labels</h3>
+        <p>Water names use Plex Mono Italic in Faded Cyan, lowercase and widely spaced, with a Deep Exposure halo. Oceans and seas switch to spaced caps. Every label has a 1 px halo blur, so the type bleeds slightly into the ground, like ink on damp paper.</p>
+      </div></div></div>
+
+      <!-- TEXTURE -->
+      <div class="row"><div class="right step" data-view="9.6,46.45,7.4"><div class="sheet">
+        <div class="section-label">Texture</div><span class="zoom-tag">z7.4 &middot; The Alps</span>
+        <h3>Terrain as uneven exposure</h3>
+        <p>Hillshade uses Deep Exposure for shadow and Faded Cyan for highlight, at an exaggeration of only 0.25. Mountains look like places where the emulsion went on thick or thin. At mid zooms the hillshade carries most of the texture. Contours join at z13, every 50 m, in Faded Cyan at 22%.</p>
+      </div></div></div>
+
+      <div class="row"><div class="left step" data-view="-73.966,40.781,14.3"><div class="sheet">
+        <div class="section-label">Texture</div><span class="zoom-tag">z14.3 &middot; Central Park</span>
+        <h3>Pressed fronds</h3>
+        <p>From z12, parks switch from a flat Pale Frond fill to the frond-print pattern at 70% opacity. The fronds in the pattern come in two strengths, white for leaves pressed flat and pale for raised ones, the same split as the fern plate.</p>
+      </div></div></div>
+
+      <div class="row"><div class="right step" data-view="-89.3842,43.0747,16.7"><div class="sheet">
+        <div class="section-label">Texture</div><span class="zoom-tag">z16.7 &middot; Capitol Square</span>
+        <h3>Floor-plan buildings</h3>
+        <p>Buildings stay flat, with 3D off, to keep the print feel. They appear at z14 as Mid Exposure fills. At z15 they gain a 45-degree drafting hatch and a 0.5 px Paper White outline, so a city block reads like a page from the blueprint. Museums, schools and libraries get a small crosshair symbol in place of the default Maki icons.</p>
+      </div></div></div>
+
+    </div>
+  </div>
+
+  <!-- ============ COMPARISON BY SCALE ============ -->
+  <div class="row" id="scales">
+    <div class="center-wide needs-config">
+      <div class="sheet cmp">
+        <div class="kicker">04 &middot; Comparison by scale</div>
+        <h2>One place, six zooms</h2>
+        <p>Every panel is centered on the Wisconsin State Capitol in Madison. The goal was one consistent print from the globe to the street, with no jarring jump between bands. Each band adds detail but keeps the same rules: white for what blocks light, darker blue for what is exposed.</p>
+        <div class="grid g3">
+          <figure><img data-static="-89.384,43.0747,2" alt="Cyanotype map at zoom 2"><figcaption><span class="band">SPECIMEN</span><b>z2</b> &middot; Continents read as pressed specimens with a soft halo. Dash-dot borders and spaced country names.</figcaption></figure>
+          <figure><img data-static="-89.384,43.0747,5" alt="Cyanotype map at zoom 5"><figcaption><span class="band">SPECIMEN</span><b>z5</b> &middot; States appear as short dashes. Motorways start as thin hollow lines. Cities get square benchmarks.</figcaption></figure>
+          <figure><img data-static="-89.384,43.0747,8" alt="Cyanotype map at zoom 8"><figcaption><span class="band">SURVEY</span><b>z8</b> &middot; Rivers, urban landuse at 40%, rail lines and county dashes come in.</figcaption></figure>
+          <figure><img data-static="-89.384,43.0747,11" alt="Cyanotype map at zoom 11"><figcaption><span class="band">SURVEY</span><b>z11</b> &middot; The lakes and isthmus take over. Parks print in Pale Frond, and primary roads join as single white lines.</figcaption></figure>
+          <figure><img data-static="-89.384,43.0747,14" alt="Cyanotype map at zoom 14"><figcaption><span class="band">PLAN</span><b>z14</b> &middot; Full street network in hairlines, ticked rail, frond-pattern parks and flat building fills.</figcaption></figure>
+          <figure><img data-static="-89.384,43.0747,17" alt="Cyanotype map at zoom 17"><figcaption><span class="band">PLAN</span><b>z17</b> &middot; Hatched footprints, crosshair POIs, dotted paths and house numbers. The halo is almost gone.</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ COMPARISON BY LOCATION ============ -->
+  <div class="row" id="places">
+    <div class="center-wide needs-config">
+      <div class="sheet cmp">
+        <div class="kicker">05 &middot; Comparison by location</div>
+        <h2>Six very different places, one zoom</h2>
+        <p>All six panels are at z11. I picked places that push different parts of the style: open water, mountains, desert, a dense city, rainforest rivers and a northern coast. The style has to hold up when one kind of feature fills the whole frame.</p>
+        <div class="grid g3">
+          <figure><img data-static="12.333,45.437,11" alt="Venice"><figcaption><b>Venice, Italy</b> &middot; A lagoon city. The water pattern and coastal halo carry the whole frame.</figcaption></figure>
+          <figure><img data-static="85.324,27.708,11" alt="Kathmandu"><figcaption><b>Kathmandu Valley, Nepal</b> &middot; A city in a bowl of mountains. Hillshade does most of the work here.</figcaption></figure>
+          <figure><img data-static="31.236,30.044,11" alt="Cairo"><figcaption><b>Cairo, Egypt</b> &middot; The Nile as a dark exposure through dense urban fabric.</figcaption></figure>
+          <figure><img data-static="139.765,35.681,11" alt="Tokyo"><figcaption><b>Tokyo, Japan</b> &middot; The densest network in the set, and a test of label collision and the Latin font fallback.</figcaption></figure>
+          <figure><img data-static="-60.02,-3.11,11" alt="Manaus"><figcaption><b>Manaus, Brazil</b> &middot; Where the Rio Negro meets the Amazon. Wide rivers, forest and very little road.</figcaption></figure>
+          <figure><img data-static="-21.92,64.14,11" alt="Reykjavik"><figcaption><b>Reykjavik, Iceland</b> &middot; A ragged northern coast with fjords and volcanic terrain.</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MOCKUP VS TILESET ============ -->
+  <div class="row" id="mockups">
+    <div class="center-wide needs-config">
+      <div class="sheet cmp">
+        <div class="kicker">06 &middot; Plan versus result</div>
+        <h2>Mock-ups next to real tiles</h2>
+        <p>My spec sheet included three concept mock-ups on made-up geography. Here each one sits next to a real place at a similar zoom.</p>
+        <div class="pair"><figure><div class="lab">MOCK-UP &middot; SPECIMEN</div><img src="img/mock-z0-5-specimen.jpg" alt="Specimen band mock-up"></figure><figure><div class="lab">TILESET &middot; NORTH SEA, z4</div><img data-static="4,55.5,4" alt="North Sea at zoom 4"></figure></div>
+        <div class="pair"><figure><div class="lab">MOCK-UP &middot; SURVEY</div><img src="img/mock-z6-11-survey.jpg" alt="Survey band mock-up"></figure><figure><div class="lab">TILESET &middot; SEATTLE, z10</div><img data-static="-122.35,47.6,10" alt="Seattle at zoom 10"></figure></div>
+        <div class="pair"><figure><div class="lab">MOCK-UP &middot; PLAN</div><img src="img/mock-z12-plan.jpg" alt="Plan band mock-up"></figure><figure><div class="lab">TILESET &middot; BOSTON HARBOR, z15</div><img data-static="-71.051,42.357,15" alt="Boston harbor at zoom 15"></figure></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CHANGES AND LIMITS ============ -->
+  <div class="row" id="limits">
+    <div class="center">
+      <div class="sheet">
+        <div class="kicker">07 &middot; What changed in Studio</div>
+        <h2>Where the medium pushed back</h2>
+        <ul class="tight">
+          <li><b>Park and peak names.</b> The spec set them in Pale Frond. On top of a Pale Frond park they disappeared, so I moved them to Faded Cyan.</li>
+          <li><b>No paper overlay.</b> Studio has no blend modes, so grain lives in the background and water patterns instead of one sheet over everything.</li>
+          <li><b>Approximate halos.</b> The blurred line under the coast fakes the Atkins glow, but it cannot spread into the land the way real emulsion does.</li>
+          <li><b>Coast simplification.</b> I wanted very simplified coasts at z0-5. Mapbox Streets already generalizes them, and Studio cannot simplify further, so the halo and soft color do that job.</li>
+          <li><b>Fonts.</b> Special Elite and Plex Mono only cover Latin script. Every label falls back to Arial Unicode MS, and I use English names where they exist, so cities like Tokyo and Cairo still get labels.</li>
+          <li><b>Pattern scale.</b> Patterns do not scale with zoom. I kept the tiles small (16-256 px) and tested them at z12 and z16.</li>
+        </ul>
+        <div class="board-notes"><img src="img/note-halo.jpg" alt="Notebook: halo reads best at small scales"><img src="img/note-iron-stain.jpg" alt="Notebook: Iron Stain is the only warm color, keep it for my own data"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ INTERACTIVE MAP ============ -->
+  <div class="row sm-margin" id="map">
+    <div class="center-wide needs-config">
+      <div class="kicker">08 &middot; The tileset</div>
+      <h2>Explore the print</h2>
+      <p>Pan and zoom anywhere from z0 to z22. Try your own neighborhood, then zoom out to the globe.</p>
+      <iframe id="full-map" class="map-frame" data-view="11/43.074/-89.384" title="Cyanotype interactive basemap" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <!-- ============ CREDITS ============ -->
+  <div class="row no-margin">
+    <div class="center">
+      <div class="credits">
+        <hr>
+        <p><b>Credits</b></p>
+        <p>Map design and text: Akhila, Geog 572: Graphic Design in Cartography, Lab 3.</p>
+        <p>Basemap built in Mapbox Studio from a blank style. Data: Mapbox Streets v8, Mapbox Terrain v2 and Terrain-DEM v1, &copy; Mapbox &copy; OpenStreetMap contributors.</p>
+        <p>Inspiration: Anna Atkins, <i>Photographs of British Algae: Cyanotype Impressions</i> (1843-53), The Metropolitan Museum of Art, public domain. Anna Atkins and Anne Dixon, <i>Cyanotypes of British and Foreign Ferns</i> (1853). Architectural blueprint, c. 1920s.</p>
+        <p>Fonts: Special Elite (Astigmatic), IBM Plex Mono and IBM Plex Sans (IBM). Page built with <a href="https://github.com/uwcartlab/scrollmap">ScrollMap</a> and Mapbox GL JS.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
+<script src="js/config.js"></script>
+<script src="lib/scrollmap.js"></script>
+<script src="js/explainer.js"></script>
+</body>
+</html>

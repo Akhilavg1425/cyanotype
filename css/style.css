@@ -1,0 +1,109 @@
+/* Cyanotype explainer. Palette and type follow the Lab 3 spec sheet. */
+:root{
+  --deep:#0C284E; --ground:#163F6E; --mid:#2A5A8C; --frond:#4F7FAF;
+  --cyan:#9CC3E0; --paper:#F2F0E6; --iron:#C08A5A;
+  --elite:'Special Elite', 'Courier New', monospace;
+  --mono:'IBM Plex Mono', ui-monospace, monospace;
+  --sans:'IBM Plex Sans', system-ui, sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; color:var(--paper); font-family:var(--sans); font-size:18px; line-height:1.6;
+  background:var(--ground) url(../img/emulsion-grain.svg) repeat; background-size:128px;
+}
+a{color:var(--cyan)}
+h1,h2,h3{font-family:var(--elite); font-weight:400; letter-spacing:.12em; text-transform:uppercase; line-height:1.25}
+h2{font-size:30px; margin:0 0 .4em}
+h3{font-size:19px; margin:1.2em 0 .3em; color:var(--cyan)}
+p{margin:0 0 1em}
+.mono,figcaption,.caption-sm{font-family:var(--mono)}
+figcaption,.caption-sm{font-size:13px; line-height:1.5; color:var(--cyan); margin-top:8px}
+figure{margin:0}
+img{max-width:100%; display:block}
+.kicker{font-family:var(--mono); font-size:13px; letter-spacing:.25em; text-transform:uppercase; color:var(--cyan); margin-bottom:.6em}
+
+/* title */
+.hero{position:relative; background:var(--deep) url(../img/water-mottle.svg); background-size:256px; overflow:hidden}
+.hero .title h1{font-size:clamp(48px,9vw,110px); letter-spacing:.3em; margin:0 0 .2em; text-shadow:0 0 18px rgba(156,195,224,.55)}
+.hero p{font-family:var(--mono); color:var(--cyan); letter-spacing:.12em}
+.hero .fern{position:absolute; opacity:.22; width:min(36vw,420px); right:-40px; bottom:-60px; transform:rotate(-12deg); mix-blend-mode:screen; pointer-events:none}
+.scroll-cue{font-family:var(--mono); font-size:13px; letter-spacing:.3em; color:var(--cyan); margin-top:3em !important}
+
+/* sheet panels: paper-white edge like a cyanotype print border */
+.sheet{background:rgba(12,40,78,.82); border:1px solid rgba(242,240,230,.55); outline:1px solid rgba(242,240,230,.18); outline-offset:6px; padding:28px 30px; text-align:left}
+.center .sheet, .center-wide .sheet{ text-align:left }
+
+/* inspiration board */
+.board{display:grid; grid-template-columns:1.05fr 1.2fr 1fr; gap:22px; align-items:start}
+.board img{border:1px solid rgba(242,240,230,.35)}
+.board-notes{display:flex; gap:14px; flex-wrap:wrap; margin-top:22px}
+.board-notes img{height:74px; width:auto; border:1px solid rgba(242,240,230,.3)}
+.statement{display:grid; grid-template-columns:2fr 1fr; gap:28px; margin-top:26px; border-top:1px dashed rgba(242,240,230,.4); padding-top:20px}
+
+/* spec sheet */
+.swatches{display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin:10px 0 6px}
+.swatch .chip{aspect-ratio:1/1; border:1px solid rgba(242,240,230,.4)}
+.swatch b{display:block; font-family:var(--mono); font-size:12px; font-weight:600; margin-top:6px; line-height:1.3}
+.swatch span{display:block; font-family:var(--mono); font-size:11px; color:var(--cyan); line-height:1.35}
+.type-row{display:grid; grid-template-columns:150px 1fr; gap:16px; align-items:baseline; border-bottom:1px dashed rgba(242,240,230,.25); padding:10px 0}
+.type-row .spec{font-family:var(--mono); font-size:12px; color:var(--cyan)}
+.sample-elite{font-family:var(--elite); text-transform:uppercase; letter-spacing:.3em; font-size:20px; text-shadow:0 0 1px var(--ground), 0 0 3px var(--ground)}
+.sample-mono{font-family:var(--mono); font-size:14px}
+.sample-italic{font-family:var(--mono); font-style:italic; color:var(--cyan); letter-spacing:.25em; font-size:14px}
+.lines{width:100%; height:auto}
+.lines text{font-family:var(--mono); font-size:12px; fill:var(--paper)}
+.lines text.d{fill:var(--cyan); font-size:11px}
+.textures{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+.textures img{aspect-ratio:1/1; object-fit:cover; border:1px solid rgba(242,240,230,.35)}
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:34px}
+
+/* scrolly map */
+#scrolly .background-item{margin-bottom:0}
+#bgmap{width:100%; height:100vh}
+.step{max-width:440px}
+.step .sheet{padding:22px 24px}
+.step h3{margin-top:0}
+.zoom-tag{display:inline-block; font-family:var(--mono); font-size:12px; letter-spacing:.15em; border:1px solid var(--paper); padding:1px 7px; margin-bottom:10px}
+.section-label{font-family:var(--elite); letter-spacing:.35em; font-size:15px; color:var(--cyan); text-transform:uppercase; margin-bottom:8px}
+#scrolly .foreground-item > .row{margin-bottom:85vh}
+#scrolly .foreground-item{padding-bottom:40vh}
+#scrolly .foreground-item .row:first-child{margin-top:-60vh}
+.left.step, .right.step{pointer-events:auto}
+
+/* comparison grids */
+.grid{display:grid; gap:16px}
+.grid.g3{grid-template-columns:repeat(3,1fr)}
+.grid.g2{grid-template-columns:repeat(2,1fr)}
+.cmp figure{background:var(--deep); border:1px solid rgba(242,240,230,.4); padding:8px}
+.cmp img{width:100%; aspect-ratio:3/2; object-fit:cover; background:var(--ground)}
+.cmp figcaption b{color:var(--paper); font-weight:600}
+.band{font-family:var(--mono); font-size:11px; letter-spacing:.2em; color:var(--paper); background:var(--mid); padding:1px 6px; margin-right:6px}
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:22px}
+.pair .lab{font-family:var(--mono); font-size:11px; letter-spacing:.2em; color:var(--cyan); margin-bottom:4px}
+.config-warning{border:1px dashed var(--iron); color:var(--paper); background:rgba(192,138,90,.15); padding:14px 18px; font-family:var(--mono); font-size:14px; margin:0 0 20px}
+
+/* final map */
+.map-frame{width:100%; height:78vh; border:1px solid var(--paper); outline:1px solid rgba(242,240,230,.25); outline-offset:6px; background:var(--deep)}
+.credits{font-family:var(--mono); font-size:13px; color:var(--cyan)}
+.credits hr{border:0; border-top:1px dashed rgba(242,240,230,.4)}
+ul.tight{margin:0 0 1em; padding-left:1.1em}
+ul.tight li{margin-bottom:.35em}
+
+/* scrollmap overrides for this page */
+.row{margin-bottom:22vh}
+.title{height:100vh}
+.mapboxgl-ctrl-attrib{font-family:var(--mono)}
+
+@media (max-width:900px){
+  .board,.statement,.two-col{grid-template-columns:1fr}
+  .swatches{grid-template-columns:repeat(4,1fr)}
+  .grid.g3{grid-template-columns:1fr 1fr}
+  .textures{grid-template-columns:1fr 1fr}
+}
+@media (max-width:539px){
+  body{font-size:16px}
+  .grid.g3,.grid.g2,.pair{grid-template-columns:1fr}
+  .sheet{padding:18px}
+  #scrolly .foreground-item .row:first-child{margin-top:0}
+}
